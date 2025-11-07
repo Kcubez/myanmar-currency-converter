@@ -56,24 +56,28 @@ export default function Home() {
     try {
       // Get API key from environment variable
       const apiKey = process.env.NEXT_PUBLIC_EXCHANGE_RATE_API_KEY;
-      
+
       console.log('Environment check:', {
         hasApiKey: !!apiKey,
         apiKeyLength: apiKey?.length,
-        apiKeyPreview: apiKey ? `${apiKey.substring(0, 8)}...` : 'NOT FOUND'
+        apiKeyPreview: apiKey ? `${apiKey.substring(0, 8)}...` : 'NOT FOUND',
       });
-      
+
       if (!apiKey) {
-        console.error('❌ API key not found. Please add NEXT_PUBLIC_EXCHANGE_RATE_API_KEY to your .env.local file');
-        alert('API key not found! Please:\n1. Rename .env to .env.local\n2. Restart the dev server\n3. Refresh the page');
+        console.error(
+          '❌ API key not found. Please add NEXT_PUBLIC_EXCHANGE_RATE_API_KEY to your .env.local file'
+        );
+        alert(
+          'API key not found! Please:\n1. Rename .env to .env.local\n2. Restart the dev server\n3. Refresh the page'
+        );
         setLoading(false);
         setInitialLoad(false);
         return;
       }
-      
+
       // Using exchangerate-api.com v6 with API key
       const apiUrl = `https://v6.exchangerate-api.com/v6/${apiKey}/latest/MMK`;
-      
+
       const response = await fetch(apiUrl);
       const data = await response.json();
 
@@ -186,21 +190,28 @@ export default function Home() {
           <Card className="lg:col-span-3 p-8 bg-white border-slate-200 shadow-xl">
             {/* From Currency */}
             <div className="space-y-3">
-              <Label htmlFor="from-amount" className="text-sm font-semibold text-slate-700 uppercase tracking-wide">From</Label>
-              <div className="flex gap-3">
+              <Label
+                htmlFor="from-amount"
+                className="text-sm font-semibold text-slate-700 uppercase tracking-wide"
+              >
+                From
+              </Label>
+              <div className="flex flex-col md:flex-row gap-3">
                 <Input
                   id="from-amount"
                   type="number"
                   value={amount}
                   onChange={e => setAmount(e.target.value)}
                   placeholder="Enter amount"
-                  className="flex-1 text-xl h-14 border-slate-300 focus:border-amber-500 focus:ring-amber-500"
+                  className="w-full md:flex-1 text-xl h-14 border-slate-300 focus:border-amber-500 focus:ring-amber-500"
                 />
                 <Select value={fromCurrency} onValueChange={setFromCurrency}>
-                  <SelectTrigger className="w-[180px] h-14 border-slate-300 text-base font-medium">
+                  <SelectTrigger className="w-full md:w-[180px] h-14 border-slate-300 text-base font-medium">
                     <SelectValue>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xl">{currencies.find(c => c.code === fromCurrency)?.flag}</span>
+                      <div className="flex items-center justify-between md:justify-start gap-2">
+                        <span className="text-xl">
+                          {currencies.find(c => c.code === fromCurrency)?.flag}
+                        </span>
                         <span className="font-semibold">{fromCurrency}</span>
                       </div>
                     </SelectValue>
@@ -236,20 +247,27 @@ export default function Home() {
 
             {/* To Currency */}
             <div className="space-y-3">
-              <Label htmlFor="to-amount" className="text-sm font-semibold text-slate-700 uppercase tracking-wide">To</Label>
-              <div className="flex gap-3">
+              <Label
+                htmlFor="to-amount"
+                className="text-sm font-semibold text-slate-700 uppercase tracking-wide"
+              >
+                To
+              </Label>
+              <div className="flex flex-col md:flex-row gap-3">
                 <Input
                   id="to-amount"
                   type="text"
                   value={result.toFixed(2)}
                   readOnly
-                  className="flex-1 text-xl h-14 font-bold bg-slate-50 border-slate-300 text-slate-900"
+                  className="w-full md:flex-1 text-xl h-14 font-bold bg-slate-50 border-slate-300 text-slate-900"
                 />
                 <Select value={toCurrency} onValueChange={setToCurrency}>
-                  <SelectTrigger className="w-[180px] h-14 border-slate-300 text-base font-medium">
+                  <SelectTrigger className="w-full md:w-[180px] h-14 border-slate-300 text-base font-medium">
                     <SelectValue>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xl">{currencies.find(c => c.code === toCurrency)?.flag}</span>
+                      <div className="flex items-center justify-between md:justify-start gap-2">
+                        <span className="text-xl">
+                          {currencies.find(c => c.code === toCurrency)?.flag}
+                        </span>
                         <span className="font-semibold">{toCurrency}</span>
                       </div>
                     </SelectValue>
@@ -302,9 +320,7 @@ export default function Home() {
                     )}
                   </div>
                   {lastUpdated && (
-                    <CardDescription className="mt-1">
-                      Updated: {lastUpdated}
-                    </CardDescription>
+                    <CardDescription className="mt-1">Updated: {lastUpdated}</CardDescription>
                   )}
                 </div>
                 <Button
@@ -329,8 +345,12 @@ export default function Home() {
                       className="bg-linear-to-br from-slate-50 to-slate-100 rounded-xl p-4 text-center hover:shadow-lg hover:scale-105 hover:border-amber-300 transition-all duration-200 border-2 border-slate-200 cursor-pointer"
                     >
                       <div className="text-3xl mb-2">{currency.flag}</div>
-                      <div className="text-xs font-bold text-slate-500 mb-1 tracking-wider">{currency.code}</div>
-                      <div className="text-base font-bold text-slate-900">{rates[currency.code].toFixed(6)}</div>
+                      <div className="text-xs font-bold text-slate-500 mb-1 tracking-wider">
+                        {currency.code}
+                      </div>
+                      <div className="text-base font-bold text-slate-900">
+                        {rates[currency.code].toFixed(6)}
+                      </div>
                     </div>
                   ))}
               </div>
